@@ -31,7 +31,7 @@ namespace LethalSheet
 
         public static String RemoveLetters(String s)
         {
-            return Regex.Replace(s, "[^.0-9]", "");
+            return Regex.Replace(s.Replace("?", "7"), "[^.0-9]", "");
         }
 
         public static String GetCollectedScrap(out Bitmap bmp)

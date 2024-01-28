@@ -38,6 +38,9 @@ namespace LethalSheet
 
         public static void Recalculate()
         {
+            overallTotal = 0;
+            overallSold = 0;
+
             foreach (Quota q in quotas)
             {
                 overallTotal += q.total;
@@ -62,7 +65,7 @@ namespace LethalSheet
 
         public static void AddScrapSold(int amount)
         {
-            GetCurrentQuota().SetSold(amount);
+            GetCurrentQuota().AddSold(amount);
             Recalculate();
         }
 
@@ -120,9 +123,9 @@ namespace LethalSheet
             Recalculate();
         }
 
-        public void SetSold(int amount)
+        public void AddSold(int amount)
         {
-            this.sold = amount;
+            this.sold += amount;
             Recalculate();
         }
 

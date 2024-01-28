@@ -81,7 +81,7 @@
             label2.Name = "label2";
             label2.Size = new Size(459, 55);
             label2.TabIndex = 3;
-            label2.Text = "Lethal Sheet v4";
+            label2.Text = "Lethal Sheet v5";
             // 
             // pictureBox1
             // 

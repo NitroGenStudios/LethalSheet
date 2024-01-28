@@ -54,6 +54,7 @@ namespace LethalSheet
                             if (result == String.Empty)
                                 break;
 
+                            LethalSheet.AddScrapSold(int.Parse(result));
                             break;
                         }
                     case 51:    // [3] -> new quota
@@ -63,6 +64,7 @@ namespace LethalSheet
                             if (result == String.Empty)
                                 break;
 
+                            LethalSheet.SetNewQuota(int.Parse(result));
                             break;
                         }
                 }
