@@ -82,6 +82,8 @@ namespace LethalSheet
             Label? averageLabel = this.Controls.Find("average", true).FirstOrDefault() as Label;
             Label? soldLabel = this.Controls.Find("sold", true).FirstOrDefault() as Label;
             Label? totalLabel = this.Controls.Find("total", true).FirstOrDefault() as Label;
+            Label? quotaLabel = this.Controls.Find("quota", true).FirstOrDefault() as Label;
+            Label? creditsLabel = this.Controls.Find("credits", true).FirstOrDefault() as Label;
 
             String credit = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x96, 0xA0 });
 
@@ -89,6 +91,10 @@ namespace LethalSheet
             averageLabel.Text = $"AVG: {credit}{LethalSheet.overallAverage}";
             soldLabel.Text = $"SOLD: {credit}{LethalSheet.overallSold}";
             totalLabel.Text = $"TOTAL: {credit}{LethalSheet.overallTotal}";
+
+            Quota currentQuota = LethalSheet.GetCurrentQuota();
+            quotaLabel.Text = $"Q{LethalSheet.currentQuota + 1}: {currentQuota.sold}/{currentQuota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
+            creditsLabel.Text = $"{credit}{LethalSheet.currentCredits}";
         }
 
         private Point lastPoint;

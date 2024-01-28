@@ -41,6 +41,7 @@
             total = new Label();
             sold = new Label();
             quota = new Label();
+            credits = new Label();
             ((System.ComponentModel.ISupportInitialize)debugimage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -78,9 +79,9 @@
             label2.Location = new Point(8, 7);
             label2.Margin = new Padding(0, 0, 3, 0);
             label2.Name = "label2";
-            label2.Size = new Size(372, 55);
+            label2.Size = new Size(459, 55);
             label2.TabIndex = 3;
-            label2.Text = "Lethal Sheet";
+            label2.Text = "Lethal Sheet v4";
             // 
             // pictureBox1
             // 
@@ -150,7 +151,7 @@
             ship.BackColor = Color.Transparent;
             ship.Font = new Font("IBM 3270", 32F, FontStyle.Regular, GraphicsUnit.Point);
             ship.ForeColor = Color.FromArgb(255, 52, 3);
-            ship.Location = new Point(8, 485);
+            ship.Location = new Point(8, 482);
             ship.Margin = new Padding(0, 0, 3, 0);
             ship.Name = "ship";
             ship.Size = new Size(203, 44);
@@ -163,7 +164,7 @@
             average.BackColor = Color.Transparent;
             average.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             average.ForeColor = Color.FromArgb(255, 52, 3);
-            average.Location = new Point(8, 453);
+            average.Location = new Point(8, 450);
             average.Margin = new Padding(0, 0, 3, 0);
             average.Name = "average";
             average.Size = new Size(133, 32);
@@ -198,16 +199,32 @@
             // 
             // quota
             // 
-            quota.AutoSize = true;
+            quota.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             quota.BackColor = Color.Transparent;
-            quota.Font = new Font("IBM 3270", 32F, FontStyle.Regular, GraphicsUnit.Point);
+            quota.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             quota.ForeColor = Color.FromArgb(255, 52, 3);
-            quota.Location = new Point(8, 378);
+            quota.Location = new Point(527, 7);
             quota.Margin = new Padding(0, 0, 3, 0);
             quota.Name = "quota";
-            quota.Size = new Size(226, 44);
+            quota.Size = new Size(289, 55);
             quota.TabIndex = 13;
-            quota.Text = "Q1: 0/130";
+            quota.Text = "Q1: 0/130 +0";
+            quota.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // credits
+            // 
+            credits.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            credits.BackColor = Color.Transparent;
+            credits.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            credits.ForeColor = Color.FromArgb(255, 52, 3);
+            credits.Location = new Point(819, 7);
+            credits.Margin = new Padding(0, 0, 3, 0);
+            credits.Name = "credits";
+            credits.RightToLeft = RightToLeft.No;
+            credits.Size = new Size(133, 55);
+            credits.TabIndex = 14;
+            credits.Text = "■60";
+            credits.TextAlign = ContentAlignment.MiddleRight;
             // 
             // Form1
             // 
@@ -216,6 +233,7 @@
             BackColor = Color.FromArgb(10, 10, 10);
             BackgroundImage = Properties.Resources.bg1;
             ClientSize = new Size(960, 540);
+            Controls.Add(credits);
             Controls.Add(quota);
             Controls.Add(sold);
             Controls.Add(total);
@@ -263,5 +281,6 @@
         private Label total;
         private Label sold;
         private Label quota;
+        private Label credits;
     }
 }

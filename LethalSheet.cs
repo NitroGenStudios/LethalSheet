@@ -14,6 +14,7 @@ namespace LethalSheet
         public static int currentDay = 0;
         public static int currentQuota = 0;
         public static int daysPassed = 0;
+        public static int currentCredits = 0;
 
         public static int overallShip = 0;
         public static int overallTotal = 0;
@@ -32,6 +33,7 @@ namespace LethalSheet
 
             // set first quota
             quotas[0].quotaReq = 130;
+            currentCredits = 60;
         }
 
         public static void Recalculate()
@@ -51,7 +53,7 @@ namespace LethalSheet
             if (currentDay > 2)
                 return;
 
-            quotas[currentQuota].SetDay(currentDay, amount);
+            GetCurrentQuota().SetDay(currentDay, amount);
             currentDay++;
             daysPassed++;
 
@@ -60,16 +62,37 @@ namespace LethalSheet
 
         public static void AddScrapSold(int amount)
         {
-            quotas[currentQuota].SetSold(amount);
+            GetCurrentQuota().SetSold(amount);
             Recalculate();
         }
 
         public static void SetNewQuota(int amount)
         {
+            currentCredits += GetCurrentQuota().sold + CalculateOvertimeBonus();
+
             currentQuota++;
             currentDay = 0;
 
-            quotas[currentQuota].quotaReq = amount;
+            GetCurrentQuota().quotaReq = amount;
+        }
+
+        public static Quota GetCurrentQuota()
+        {
+            return quotas[currentQuota];
+        }
+
+        // https://lethal.miraheze.org/wiki/Quota
+        public static int CalculateOvertimeBonus()
+        {
+            Quota currentQuota = GetCurrentQuota();
+            int result = 0;
+
+            if (currentDay == 2)
+                result = ((currentQuota.sold - currentQuota.quotaReq) / 5) - 15;
+            else
+                result = ((currentQuota.sold - currentQuota.quotaReq) / 5) + (15 * (3 - currentDay));
+
+            return Math.Max(result, 0);
         }
     }
 
