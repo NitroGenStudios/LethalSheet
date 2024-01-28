@@ -17,7 +17,7 @@ namespace LethalSheet
             _globalKeyboardHook = new GlobalKeyboardHook();
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
-            LethalSheet.Init();
+            LethalSheet.Reset();
         }
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)

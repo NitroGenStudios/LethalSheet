@@ -20,10 +20,17 @@ namespace LethalSheet
         public static int overallAverage = 0;
         public static int overallSold = 0;
 
-        public static void Init()
+        public static void Reset()
         { 
             quotas = new Quota[numOfQuotas];
 
+            // why
+            for (int i = 0; i < numOfQuotas; i++)
+            {
+                quotas[i] = new Quota();
+            }
+
+            // set first quota
             quotas[0].quotaReq = 130;
         }
 
@@ -41,6 +48,9 @@ namespace LethalSheet
 
         public static void AddScrapCollected(int amount)
         {
+            if (currentDay > 2)
+                return;
+
             quotas[currentQuota].SetDay(currentDay, amount);
             currentDay++;
             daysPassed++;
@@ -72,7 +82,7 @@ namespace LethalSheet
         public int total;
         public float average;
 
-        Quota()
+        public Quota()
         {
             this.quotaReq = 0;
             this.days = new int[3];

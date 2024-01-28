@@ -40,6 +40,7 @@
             average = new Label();
             total = new Label();
             sold = new Label();
+            quota = new Label();
             ((System.ComponentModel.ISupportInitialize)debugimage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -195,6 +196,19 @@
             sold.TabIndex = 12;
             sold.Text = "SOLD: ■0";
             // 
+            // quota
+            // 
+            quota.AutoSize = true;
+            quota.BackColor = Color.Transparent;
+            quota.Font = new Font("IBM 3270", 32F, FontStyle.Regular, GraphicsUnit.Point);
+            quota.ForeColor = Color.FromArgb(255, 52, 3);
+            quota.Location = new Point(8, 378);
+            quota.Margin = new Padding(0, 0, 3, 0);
+            quota.Name = "quota";
+            quota.Size = new Size(226, 44);
+            quota.TabIndex = 13;
+            quota.Text = "Q1: 0/130";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(6F, 12F);
@@ -202,6 +216,7 @@
             BackColor = Color.FromArgb(10, 10, 10);
             BackgroundImage = Properties.Resources.bg1;
             ClientSize = new Size(960, 540);
+            Controls.Add(quota);
             Controls.Add(sold);
             Controls.Add(total);
             Controls.Add(average);
@@ -247,5 +262,6 @@
         private Label average;
         private Label total;
         private Label sold;
+        private Label quota;
     }
 }
