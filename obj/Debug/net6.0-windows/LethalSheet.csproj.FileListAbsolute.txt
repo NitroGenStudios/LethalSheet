@@ -1,0 +1,27 @@
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\LethalSheet.exe
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\LethalSheet.deps.json
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\LethalSheet.runtimeconfig.json
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\LethalSheet.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\LethalSheet.pdb
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.Form1.resources
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.csproj.GenerateResource.cache
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.AssemblyInfoInputs.cache
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.AssemblyInfo.cs
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.csproj.CoreCompileInputs.cache
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\refint\LethalSheet.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.pdb
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.genruntimeconfig.cache
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\ref\LethalSheet.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\x86\leptonica-1.82.0.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\x86\tesseract50.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\x64\leptonica-1.82.0.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\x64\tesseract50.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\Tesseract.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\Tesseract.Drawing.dll
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.csproj.AssemblyReference.cache
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.csproj.CopyComplete
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\tessdata\eng.traineddata
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\Font License.txt
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.Properties.Resources.resources

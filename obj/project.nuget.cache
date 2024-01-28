@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "HrZkRGAKU8FJ7i7DtJIqUuJD7mHoAZZ0e9km6EPLWdhyH/2dBhziA90g47bpWsrBolX3oMZuujhUK+uh73w7EA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Redline\\Desktop\\LethalSheet\\LethalSheet2.0\\LethalSheet\\LethalSheet.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Redline\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\Redline\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
+    "C:\\Users\\Redline\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
+    "C:\\Users\\Redline\\.nuget\\packages\\tesseract\\5.2.0\\tesseract.5.2.0.nupkg.sha512",
+    "C:\\Users\\Redline\\.nuget\\packages\\tesseract.drawing\\5.2.0\\tesseract.drawing.5.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}
