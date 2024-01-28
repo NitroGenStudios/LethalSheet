@@ -65,7 +65,15 @@ namespace LethalSheet
 
         public static void AddScrapSold(int amount)
         {
-            GetCurrentQuota().AddSold(amount);
+            if (currentDay == 2)
+                GetCurrentQuota().AddSold((int)Math.Round(amount / (23f/30f)));    // 76.66%
+            else if (currentDay == 1)
+                GetCurrentQuota().AddSold((int)Math.Round(amount / (8f/15f)));  // 53.66%
+            else if (currentDay == 0)
+                GetCurrentQuota().AddSold((int)Math.Round(amount / 0.3f));  // 30%
+            else
+                GetCurrentQuota().AddSold(amount);  // 100%
+
             Recalculate();
         }
 
@@ -90,7 +98,7 @@ namespace LethalSheet
             Quota currentQuota = GetCurrentQuota();
             int result = 0;
 
-            if (currentDay == 2)
+            if (currentDay >= 3)
                 result = ((currentQuota.sold - currentQuota.quotaReq) / 5) - 15;
             else
                 result = ((currentQuota.sold - currentQuota.quotaReq) / 5) + (15 * (3 - currentDay));
