@@ -92,6 +92,11 @@ namespace LethalSheet
             return quotas[currentQuota];
         }
 
+        public static Quota GetQuota(int q)
+        {
+            return quotas[q];
+        }
+
         // https://lethal.miraheze.org/wiki/Quota
         public static int CalculateOvertimeBonus()
         {

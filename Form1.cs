@@ -9,6 +9,7 @@ namespace LethalSheet
     public partial class Form1 : Form
     {
         private GlobalKeyboardHook _globalKeyboardHook;
+        private int selectedQuota;
 
         public Form1()
         {
@@ -22,13 +23,13 @@ namespace LethalSheet
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
+            int keycode = e.KeyboardData.VirtualCode;
+
+            if (keycode < 49 || keycode > 51)
+                return;
+
             if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
             {
-                int keycode = e.KeyboardData.VirtualCode;
-
-                if (keycode < 49 || keycode > 51)
-                    return;
-
                 Label? outputLabel = this.Controls.Find("debuglabel", true).FirstOrDefault() as Label;
                 PictureBox? outputPicture = this.Controls.Find("debugimage", true).FirstOrDefault() as PictureBox;
 
@@ -44,7 +45,15 @@ namespace LethalSheet
                             if (result == String.Empty)
                                 break;
 
-                            LethalSheet.AddScrapCollected(int.Parse(result));
+                            try
+                            {
+                                LethalSheet.AddScrapCollected(int.Parse(result));
+                            }
+                            catch
+                            {
+                                Debug.WriteLine($"int parse error: {result}");
+                            }
+
                             break;
                         }
                     case 50:    // [2] -> sold scrap
@@ -54,7 +63,15 @@ namespace LethalSheet
                             if (result == String.Empty)
                                 break;
 
-                            LethalSheet.AddScrapSold(int.Parse(result));
+                            try
+                            {
+                                LethalSheet.AddScrapSold(int.Parse(result));
+                            }
+                            catch
+                            {
+                                Debug.WriteLine($"int parse error: {result}");
+                            }
+
                             break;
                         }
                     case 51:    // [3] -> new quota
@@ -64,7 +81,16 @@ namespace LethalSheet
                             if (result == String.Empty)
                                 break;
 
-                            LethalSheet.SetNewQuota(int.Parse(result));
+                            try
+                            {
+                                selectedQuota = LethalSheet.currentQuota + 1;
+                                LethalSheet.SetNewQuota(int.Parse(result));
+                            }
+                            catch
+                            {
+                                Debug.WriteLine($"int parse error: {result}");
+                            }
+
                             break;
                         }
                 }
@@ -87,6 +113,10 @@ namespace LethalSheet
             Label? quotaLabel = this.Controls.Find("quota", true).FirstOrDefault() as Label;
             Label? creditsLabel = this.Controls.Find("credits", true).FirstOrDefault() as Label;
 
+            Label? day1label = this.Controls.Find("day1", true).FirstOrDefault() as Label;
+            Label? day2label = this.Controls.Find("day2", true).FirstOrDefault() as Label;
+            Label? day3label = this.Controls.Find("day3", true).FirstOrDefault() as Label;
+
             String credit = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x96, 0xA0 });
 
             shipLabel.Text = $"SHIP: {credit}{LethalSheet.overallShip}";
@@ -94,9 +124,13 @@ namespace LethalSheet
             soldLabel.Text = $"SOLD: {credit}{LethalSheet.overallSold}";
             totalLabel.Text = $"TOTAL: {credit}{LethalSheet.overallTotal}";
 
-            Quota currentQuota = LethalSheet.GetCurrentQuota();
-            quotaLabel.Text = $"Q{LethalSheet.currentQuota + 1}: {currentQuota.sold}/{currentQuota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
+            Quota quota = LethalSheet.GetQuota(selectedQuota);
+            quotaLabel.Text = $"Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
             creditsLabel.Text = $"{credit}{LethalSheet.currentCredits}";
+
+            day1label.Text = $"Day 1: {credit}{quota.days[0]}";
+            day2label.Text = $"Day 2: {credit}{quota.days[1]}";
+            day3label.Text = $"Day 3: {credit}{quota.days[2]}";
         }
 
         private Point lastPoint;
@@ -112,6 +146,18 @@ namespace LethalSheet
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             lastPoint = new Point(e.X, e.Y);
+        }
+
+        private void quotaNext_Click(object sender, EventArgs e)
+        {
+            selectedQuota = Math.Min(selectedQuota + 1, LethalSheet.numOfQuotas);
+            RefreshForm();
+        }
+
+        private void quotaPrev_Click(object sender, EventArgs e)
+        {
+            selectedQuota = Math.Max(selectedQuota - 1, 0);
+            RefreshForm();
         }
     }
 }

@@ -92,11 +92,11 @@ namespace LethalSheet
                                         {
                                             if (iter.IsAtBeginningOf(PageIteratorLevel.Block))
                                             {
-                                                Debug.WriteLine("<BLOCK>");
+                                                //Debug.WriteLine("<BLOCK>");
                                             }
 
-                                            Debug.Write(iter.GetText(PageIteratorLevel.Word));
-                                            Debug.Write(" ");
+                                            //Debug.Write(iter.GetText(PageIteratorLevel.Word));
+                                            //Debug.Write(" ");
 
                                             if (iter.IsAtFinalOf(PageIteratorLevel.TextLine, PageIteratorLevel.Word))
                                             {
