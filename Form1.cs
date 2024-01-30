@@ -2,14 +2,33 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Xml.Linq;
 
 namespace LethalSheet
 {
     public partial class Form1 : Form
     {
+        public enum modificationType
+        {
+            day, quota
+        }
+
         private GlobalKeyboardHook _globalKeyboardHook;
         private int selectedQuota;
+
+        private bool isModifyingValue = false;
+        private int dayToModify = 0;
+        private Label modifyLabel = null;
+        private String modificationBase = "";
+        private String currentModification = String.Empty;
+        private modificationType modType = modificationType.day;
+
+        private int[] quotaMod = new int[2];
+        private int currentQuotaMod = 0;
+
+        Color defaultColor = Color.FromArgb(255, 52, 3);
+        String credit = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x96, 0xA0 });
 
         public Form1()
         {
@@ -26,11 +45,15 @@ namespace LethalSheet
         {
             int keycode = e.KeyboardData.VirtualCode;
 
-            if (keycode < 49 || keycode > 51)
-                return;
-
             if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
             {
+                // handle day modifications
+                if (isModifyingValue)
+                {
+                    HandleModification(keycode);
+                    return;
+                }
+
                 Label? outputLabel = this.Controls.Find("debuglabel", true).FirstOrDefault() as Label;
                 PictureBox? outputPicture = this.Controls.Find("debugimage", true).FirstOrDefault() as PictureBox;
 
@@ -94,6 +117,10 @@ namespace LethalSheet
 
                             break;
                         }
+                    default:
+                        {
+                            return;
+                        }
                 }
 
                 outputLabel.Text = $"Result Debug: {result}";
@@ -103,6 +130,91 @@ namespace LethalSheet
 
                 e.Handled = true;
             }
+        }
+
+        // some constants to make this less confusing
+        const int ESC = 27;
+        const int ENTER = 13;
+        const int BACKSPACE = 8;
+        private void HandleModification(int keycode)
+        {
+            // cancel
+            if (keycode == ESC)
+            {
+                // stop modifying the day
+                isModifyingValue = false;
+                modifyLabel.ForeColor = defaultColor;
+
+                RefreshForm();
+                return;
+            }
+
+            // submit
+            if (keycode == ENTER)
+            {
+                // enter modification
+                if (modType == modificationType.day)
+                    LethalSheet.GetQuota(selectedQuota).SetDay(dayToModify, int.Parse(currentModification));
+                if (modType == modificationType.quota)
+                {
+                    if (currentQuotaMod == 0)
+                    {
+                        quotaMod[0] = int.Parse(currentModification);
+                        currentModification = "";
+                        currentQuotaMod = 1;
+                        return;
+                    }
+
+                    if (currentModification != "")
+                        quotaMod[1] = int.Parse(currentModification);
+
+                    LethalSheet.GetQuota(selectedQuota).sold = quotaMod[0];
+                    LethalSheet.GetQuota(selectedQuota).quotaReq = quotaMod[1];
+                }
+
+                // stop modifying the day
+                isModifyingValue = false;
+                modifyLabel.ForeColor = defaultColor;
+
+                // force recalculate
+                LethalSheet.Recalculate();
+
+                RefreshForm();
+                return;
+            }
+
+            // handle deletion
+            if (keycode == BACKSPACE && currentModification.Length > 0)
+            {
+                // remove last number and update text
+                currentModification.Remove(currentModification.Length - 1, 1);
+
+                if (modType == modificationType.day)
+                    modifyLabel.Text = String.Format(modificationBase, dayToModify + 1, currentModification);
+                if (modType == modificationType.quota && currentQuotaMod == 0)
+                    modifyLabel.Text = String.Format(modificationBase, selectedQuota, currentModification, quotaMod[1]);
+                if (modType == modificationType.quota && currentQuotaMod == 1)
+                    modifyLabel.Text = String.Format(modificationBase, selectedQuota, quotaMod[0], currentModification);
+
+                return;
+            }
+
+            // figure out the number pressed, 48 in ASCII is "0"
+            int numberKey = keycode - 48;
+
+            if (numberKey < 0 || numberKey >= 10)
+                return;
+
+            // add number to the end of the string
+            currentModification += numberKey.ToString();
+
+            // modify text
+            if (modType == modificationType.day)
+                modifyLabel.Text = String.Format(modificationBase, dayToModify + 1, currentModification);
+            if (modType == modificationType.quota && currentQuotaMod == 0)
+                modifyLabel.Text = String.Format(modificationBase, selectedQuota, currentModification, quotaMod[1]);
+            if (modType == modificationType.quota && currentQuotaMod == 1)
+                modifyLabel.Text = String.Format(modificationBase, selectedQuota, quotaMod[0], currentModification);
         }
 
         public void RefreshForm()
@@ -118,8 +230,6 @@ namespace LethalSheet
             Label? day1label = this.Controls.Find("day1", true).FirstOrDefault() as Label;
             Label? day2label = this.Controls.Find("day2", true).FirstOrDefault() as Label;
             Label? day3label = this.Controls.Find("day3", true).FirstOrDefault() as Label;
-
-            String credit = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x96, 0xA0 });
 
             shipLabel.Text = $"SHIP: {credit}{LethalSheet.overallShip}";
             averageLabel.Text = $"AVG: {credit}{LethalSheet.overallAverage}";
@@ -139,12 +249,18 @@ namespace LethalSheet
 
         private void quotaNext_Click(object sender, EventArgs e)
         {
+            if (isModifyingValue)
+                return;
+
             selectedQuota = Math.Min(selectedQuota + 1, LethalSheet.numOfQuotas - 1);
             RefreshForm();
         }
 
         private void quotaPrev_Click(object sender, EventArgs e)
         {
+            if (isModifyingValue)
+                return;
+
             selectedQuota = Math.Max(selectedQuota - 1, 0);
             RefreshForm();
         }
@@ -162,6 +278,42 @@ namespace LethalSheet
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             lastPoint = new Point(e.X, e.Y);
+        }
+
+        private void day_Click(object sender, EventArgs e)
+        {
+            currentModification = "";
+            modifyLabel = sender as Label;
+            modifyLabel.ForeColor = Color.White;
+            dayToModify = int.Parse(Screenshot.RemoveLetters(modifyLabel.Name)) - 1;
+            isModifyingValue = true;
+
+            modType = modificationType.day;
+
+            modificationBase = "Day {0}: " + credit + "{1}";
+        }
+
+        private void quota_Click(object sender, EventArgs e)
+        {
+            currentQuotaMod = 0;
+            quotaMod[0] = 0;
+            quotaMod[1] = LethalSheet.GetQuota(selectedQuota).quotaReq;
+
+            currentModification = "";
+            modifyLabel = sender as Label;
+            modifyLabel.ForeColor = Color.White;
+            isModifyingValue = true;
+            dayToModify = selectedQuota; // this is a stupid workaround lmao
+
+            modType = modificationType.quota;
+
+            modificationBase = "Quota {0}: {1}/{2} +0";
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            LethalSheet.Reset();
+            RefreshForm();
         }
     }
 }

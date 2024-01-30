@@ -48,6 +48,7 @@
             quotaNext = new Label();
             quotaPrev = new Label();
             avgReq = new Label();
+            reset = new Label();
             ((System.ComponentModel.ISupportInitialize)debugimage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -85,9 +86,9 @@
             label2.Location = new Point(8, 7);
             label2.Margin = new Padding(0, 0, 3, 0);
             label2.Name = "label2";
-            label2.Size = new Size(459, 55);
+            label2.Size = new Size(488, 55);
             label2.TabIndex = 3;
-            label2.Text = "Lethal Sheet v9";
+            label2.Text = "Lethal Sheet v10";
             // 
             // pictureBox1
             // 
@@ -216,6 +217,7 @@
             quota.TabIndex = 13;
             quota.Text = "Quota 1: 0/130 +0";
             quota.TextAlign = ContentAlignment.MiddleCenter;
+            quota.Click += quota_Click;
             // 
             // credits
             // 
@@ -237,39 +239,42 @@
             day1.BackColor = Color.Transparent;
             day1.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             day1.ForeColor = Color.FromArgb(255, 52, 3);
-            day1.Location = new Point(11, 199);
+            day1.Location = new Point(179, 199);
             day1.Margin = new Padding(0, 0, 3, 0);
             day1.Name = "day1";
-            day1.Size = new Size(603, 32);
+            day1.Size = new Size(261, 32);
             day1.TabIndex = 15;
             day1.Text = "Day 1: ■0";
             day1.TextAlign = ContentAlignment.MiddleCenter;
+            day1.Click += day_Click;
             // 
             // day2
             // 
             day2.BackColor = Color.Transparent;
             day2.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             day2.ForeColor = Color.FromArgb(255, 52, 3);
-            day2.Location = new Point(11, 242);
+            day2.Location = new Point(179, 242);
             day2.Margin = new Padding(0, 0, 3, 0);
             day2.Name = "day2";
-            day2.Size = new Size(603, 32);
+            day2.Size = new Size(261, 32);
             day2.TabIndex = 16;
             day2.Text = "Day 2: ■0";
             day2.TextAlign = ContentAlignment.MiddleCenter;
+            day2.Click += day_Click;
             // 
             // day3
             // 
             day3.BackColor = Color.Transparent;
             day3.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             day3.ForeColor = Color.FromArgb(255, 52, 3);
-            day3.Location = new Point(12, 288);
+            day3.Location = new Point(179, 288);
             day3.Margin = new Padding(0, 0, 3, 0);
             day3.Name = "day3";
-            day3.Size = new Size(603, 32);
+            day3.Size = new Size(261, 32);
             day3.TabIndex = 17;
             day3.Text = "Day 3: ■0";
             day3.TextAlign = ContentAlignment.MiddleCenter;
+            day3.Click += day_Click;
             // 
             // quotaNext
             // 
@@ -314,6 +319,22 @@
             avgReq.TabIndex = 20;
             avgReq.Text = "Average required: ■0";
             // 
+            // reset
+            // 
+            reset.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            reset.BackColor = Color.Transparent;
+            reset.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            reset.ForeColor = Color.FromArgb(255, 52, 3);
+            reset.Location = new Point(499, 7);
+            reset.Margin = new Padding(0, 0, 3, 0);
+            reset.Name = "reset";
+            reset.RightToLeft = RightToLeft.No;
+            reset.Size = new Size(133, 55);
+            reset.TabIndex = 21;
+            reset.Text = "RESET";
+            reset.TextAlign = ContentAlignment.MiddleLeft;
+            reset.Click += reset_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(6F, 12F);
@@ -321,6 +342,7 @@
             BackColor = Color.FromArgb(10, 10, 10);
             BackgroundImage = Properties.Resources.bg1;
             ClientSize = new Size(960, 540);
+            Controls.Add(reset);
             Controls.Add(avgReq);
             Controls.Add(quotaPrev);
             Controls.Add(quotaNext);
@@ -382,5 +404,6 @@
         private Label quotaNext;
         private Label quotaPrev;
         private Label avgReq;
+        private Label reset;
     }
 }
