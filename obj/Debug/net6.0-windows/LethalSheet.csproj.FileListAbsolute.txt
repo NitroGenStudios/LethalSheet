@@ -25,3 +25,4 @@ C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0
 C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\tessdata\eng.traineddata
 C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\Font License.txt
 C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\obj\Debug\net6.0-windows\LethalSheet.Properties.Resources.resources
+C:\Users\Redline\Desktop\LethalSheet\LethalSheet2.0\LethalSheet\bin\Debug\net6.0-windows\Font.otf

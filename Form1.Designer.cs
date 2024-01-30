@@ -47,6 +47,7 @@
             day3 = new Label();
             quotaNext = new Label();
             quotaPrev = new Label();
+            avgReq = new Label();
             ((System.ComponentModel.ISupportInitialize)debugimage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -86,7 +87,7 @@
             label2.Name = "label2";
             label2.Size = new Size(459, 55);
             label2.TabIndex = 3;
-            label2.Text = "Lethal Sheet v8";
+            label2.Text = "Lethal Sheet v9";
             // 
             // pictureBox1
             // 
@@ -182,7 +183,7 @@
             total.BackColor = Color.Transparent;
             total.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             total.ForeColor = Color.FromArgb(255, 52, 3);
-            total.Location = new Point(306, 494);
+            total.Location = new Point(300, 491);
             total.Margin = new Padding(0, 0, 3, 0);
             total.Name = "total";
             total.Size = new Size(167, 32);
@@ -195,7 +196,7 @@
             sold.BackColor = Color.Transparent;
             sold.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
             sold.ForeColor = Color.FromArgb(255, 52, 3);
-            sold.Location = new Point(306, 453);
+            sold.Location = new Point(300, 450);
             sold.Margin = new Padding(0, 0, 3, 0);
             sold.Name = "sold";
             sold.Size = new Size(150, 32);
@@ -300,6 +301,19 @@
             quotaPrev.TextAlign = ContentAlignment.MiddleLeft;
             quotaPrev.Click += quotaPrev_Click;
             // 
+            // avgReq
+            // 
+            avgReq.AutoSize = true;
+            avgReq.BackColor = Color.Transparent;
+            avgReq.Font = new Font("IBM 3270", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            avgReq.ForeColor = Color.FromArgb(255, 52, 3);
+            avgReq.Location = new Point(5, 387);
+            avgReq.Margin = new Padding(0, 0, 3, 0);
+            avgReq.Name = "avgReq";
+            avgReq.Size = new Size(354, 32);
+            avgReq.TabIndex = 20;
+            avgReq.Text = "Average required: ■0";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(6F, 12F);
@@ -307,6 +321,7 @@
             BackColor = Color.FromArgb(10, 10, 10);
             BackgroundImage = Properties.Resources.bg1;
             ClientSize = new Size(960, 540);
+            Controls.Add(avgReq);
             Controls.Add(quotaPrev);
             Controls.Add(quotaNext);
             Controls.Add(day3);
@@ -366,5 +381,6 @@
         private Label day3;
         private Label quotaNext;
         private Label quotaPrev;
+        private Label avgReq;
     }
 }

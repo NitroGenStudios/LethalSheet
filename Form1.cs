@@ -19,6 +19,7 @@ namespace LethalSheet
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
             LethalSheet.Reset();
+            RefreshForm();
         }
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
@@ -112,6 +113,7 @@ namespace LethalSheet
             Label? totalLabel = this.Controls.Find("total", true).FirstOrDefault() as Label;
             Label? quotaLabel = this.Controls.Find("quota", true).FirstOrDefault() as Label;
             Label? creditsLabel = this.Controls.Find("credits", true).FirstOrDefault() as Label;
+            Label? avgReqLabel = this.Controls.Find("avgReq", true).FirstOrDefault() as Label;
 
             Label? day1label = this.Controls.Find("day1", true).FirstOrDefault() as Label;
             Label? day2label = this.Controls.Find("day2", true).FirstOrDefault() as Label;
@@ -128,9 +130,23 @@ namespace LethalSheet
             quotaLabel.Text = $"Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
             creditsLabel.Text = $"{credit}{LethalSheet.currentCredits}";
 
+            avgReqLabel.Text = $"Average required: {credit}{LethalSheet.CalculateAverageRequiredToCompleteRun()}";
+
             day1label.Text = $"Day 1: {credit}{quota.days[0]}";
             day2label.Text = $"Day 2: {credit}{quota.days[1]}";
             day3label.Text = $"Day 3: {credit}{quota.days[2]}";
+        }
+
+        private void quotaNext_Click(object sender, EventArgs e)
+        {
+            selectedQuota = Math.Min(selectedQuota + 1, LethalSheet.numOfQuotas - 1);
+            RefreshForm();
+        }
+
+        private void quotaPrev_Click(object sender, EventArgs e)
+        {
+            selectedQuota = Math.Max(selectedQuota - 1, 0);
+            RefreshForm();
         }
 
         private Point lastPoint;
@@ -146,18 +162,6 @@ namespace LethalSheet
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             lastPoint = new Point(e.X, e.Y);
-        }
-
-        private void quotaNext_Click(object sender, EventArgs e)
-        {
-            selectedQuota = Math.Min(selectedQuota + 1, LethalSheet.numOfQuotas);
-            RefreshForm();
-        }
-
-        private void quotaPrev_Click(object sender, EventArgs e)
-        {
-            selectedQuota = Math.Max(selectedQuota - 1, 0);
-            RefreshForm();
         }
     }
 }

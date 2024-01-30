@@ -8,6 +8,16 @@ namespace LethalSheet
 {
     public class LethalSheet
     {
+        public static int[] averageQuotas = new int[10]
+        {
+            130, 237, 363, 521, 724, 984, 1313, 1725, 2232, 2847
+        };
+
+        public static int[] averageQuotaIncrease = new int[10]
+        {
+            0, 107, 126, 158, 203, 260, 329, 412, 507, 615
+        };
+
         public static int numOfQuotas = 10;
         public static Quota[] quotas = new Quota[numOfQuotas];
 
@@ -34,6 +44,9 @@ namespace LethalSheet
             // set first quota
             quotas[0].quotaReq = 130;
             currentCredits = 60;
+
+            // recalc
+            Recalculate();
         }
 
         public static void Recalculate()
@@ -45,10 +58,47 @@ namespace LethalSheet
             {
                 overallTotal += q.total;
                 overallSold += q.sold;
+                q.isQuotaPredicted = false;
             }
 
             overallShip = overallTotal - overallSold;
-            overallAverage = (int)Math.Round((float)overallTotal / (float)daysPassed);
+            overallAverage = Math.Max((int)Math.Round((float)overallTotal / (float)daysPassed), 0);
+
+            PredictQuotas();
+        }
+
+        private static void PredictQuotas()
+        {
+            int currentQ = GetCurrentQuota().quotaReq;
+            int sum = currentQ;
+
+            for (int i = currentQuota + 1; i < numOfQuotas; i++)
+            {
+                Quota q = GetQuota(i);
+
+                q.isQuotaPredicted = true;
+
+                sum += averageQuotaIncrease[i];
+                q.quotaReq = sum;
+            }
+        }
+
+        public static int CalculateAverageRequiredToCompleteRun()
+        {
+            int sumRequired = 0;
+
+            for (int i = currentQuota; i < numOfQuotas; i++)
+            {
+                Quota q = GetQuota(i);
+                sumRequired += q.quotaReq;
+            }
+
+            return (int)Math.Round((float)(sumRequired - overallShip) / GetRemainingDays());
+        }
+
+        public static int GetRemainingDays()
+        {
+            return (numOfQuotas * 3) - (currentDay + 1);
         }
 
         public static void AddScrapCollected(int amount)
@@ -65,10 +115,11 @@ namespace LethalSheet
 
         public static void AddScrapSold(int amount)
         {
+            // need to compensate for less selling value, otherwise ship scrap get's desynced
             if (currentDay == 2)
                 GetCurrentQuota().AddSold((int)Math.Round(amount / (23f/30f)));    // 76.66%
             else if (currentDay == 1)
-                GetCurrentQuota().AddSold((int)Math.Round(amount / (8f/15f)));  // 53.66%
+                GetCurrentQuota().AddSold((int)Math.Round(amount / (8f/15f)));  // 53.33%
             else if (currentDay == 0)
                 GetCurrentQuota().AddSold((int)Math.Round(amount / 0.3f));  // 30%
             else
@@ -94,7 +145,7 @@ namespace LethalSheet
 
         public static Quota GetQuota(int q)
         {
-            return quotas[q];
+            return quotas[Math.Clamp(q, 0, numOfQuotas - 1)];
         }
 
         // https://lethal.miraheze.org/wiki/Quota
@@ -121,6 +172,8 @@ namespace LethalSheet
         public int total;
         public float average;
 
+        public bool isQuotaPredicted;
+
         public Quota()
         {
             this.quotaReq = 0;
@@ -128,6 +181,7 @@ namespace LethalSheet
             this.sold = 0;
             this.total = 0;
             this.average = 0;
+            this.isQuotaPredicted = false;
         }
 
         public void SetDay(int day, int amount)
