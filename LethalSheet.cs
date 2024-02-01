@@ -18,18 +18,18 @@ namespace LethalSheet
             0, 107, 126, 158, 203, 260, 329, 412, 507, 615
         };
 
-        public static int numOfQuotas = 10;
+        public static int numOfQuotas = 10; //
         public static Quota[] quotas = new Quota[numOfQuotas];
 
         public static int currentDay = 0;
         public static int currentQuota = 0;
-        public static int daysPassed = 0;
+        public static int daysPassed = 0;   //
         public static int currentCredits = 0;
 
-        public static int overallShip = 0;
-        public static int overallTotal = 0;
-        public static int overallAverage = 0;
-        public static int overallSold = 0;
+        public static int overallShip = 0;  //
+        public static int overallTotal = 0; //  
+        public static int overallAverage = 0;   //
+        public static int overallSold = 0;  //
 
         public static void Reset()
         { 
@@ -44,6 +44,8 @@ namespace LethalSheet
             // set first quota
             quotas[0].quotaReq = 130;
             currentCredits = 60;
+            currentDay = 0;
+            currentQuota = 0;
 
             // recalc
             Recalculate();
@@ -53,9 +55,12 @@ namespace LethalSheet
         {
             overallTotal = 0;
             overallSold = 0;
+            daysPassed = 0;
 
             foreach (Quota q in quotas)
             {
+                daysPassed += q.days.Count(i => i > 0);
+
                 overallTotal += q.total;
                 overallSold += q.sold;
                 q.isQuotaPredicted = false;
@@ -161,6 +166,37 @@ namespace LethalSheet
 
             return Math.Max(result, 0);
         }
+
+        public static String ToString()
+        {
+            String result = "";
+
+            result += $"{currentDay}/{currentQuota}/{currentCredits}";
+
+            foreach (Quota q in quotas)
+            {
+                result += $"/{q.ToString()}";
+            }
+
+            return result;
+        }
+
+        public static void FromString(String str)
+        {
+            String[] split = str.Split("/");
+
+            currentDay = int.Parse(split[0]);
+            currentQuota = int.Parse(split[1]);
+            currentCredits = int.Parse(split[2]);
+
+            for (int i = 3; i < split.Length; i++)
+            {
+                quotas[i - 3] = new Quota(split[i]);
+                quotas[i - 3].Recalculate();
+            }
+
+            Recalculate();
+        }
     }
 
     public class Quota
@@ -200,6 +236,21 @@ namespace LethalSheet
         {
             this.total = days[0] + days[1] + days[2];
             this.average = total / 3f;
+        }
+
+        public override String ToString()
+        {
+            return $"{days[0]};{days[1]};{days[2]}|{sold}|{quotaReq}|{isQuotaPredicted}";
+        }
+
+        public Quota(String str)
+        {
+            String[] split = str.Split("|");
+
+            this.days = split[0].Split(";").Select(int.Parse).ToArray();
+            this.sold = int.Parse(split[1]);
+            this.quotaReq = int.Parse(split[2]);
+            this.isQuotaPredicted = bool.Parse(split[3]);
         }
     }
 }

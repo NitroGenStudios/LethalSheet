@@ -32,7 +32,7 @@ namespace LethalSheet
         private int[] quotaMod = new int[2];
         private int currentQuotaMod = 0;
 
-        private int[] keybinds = new int[] { 49, 50, 51 };
+        public int[] keybinds = new int[] { 49, 50, 51 };
         private bool isRebinding = false;
         private Label keybindLabel = null;
         private int selectedKeybindSlot = 0;
@@ -48,6 +48,7 @@ namespace LethalSheet
             _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
 
             LethalSheet.Reset();
+            Save.LoadState(this);
             RefreshForm();
         }
 
@@ -117,7 +118,7 @@ namespace LethalSheet
                 return;
             }
 
-            done:
+        done:
 
             outputLabel.Text = $"Result Debug: {result}";
             outputPicture.Image = bmp;
@@ -251,6 +252,8 @@ namespace LethalSheet
             this.key1.Text = $"- Scrap collected: [{(char)keybinds[0]}]";
             this.key2.Text = $"- Scrap sold: [{(char)keybinds[1]}]";
             this.key3.Text = $"- New quota: [{(char)keybinds[2]}]";
+
+            Save.SaveState(this);
         }
 
         private void quotaNext_Click(object sender, EventArgs e)
