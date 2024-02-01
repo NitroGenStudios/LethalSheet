@@ -9,6 +9,11 @@ namespace LethalSheet
 {
     public partial class Form1 : Form
     {
+        // some constants to make keys less confusing
+        const int ESC = 27;
+        const int ENTER = 13;
+        const int BACKSPACE = 8;
+
         public enum modificationType
         {
             day, quota
@@ -26,6 +31,11 @@ namespace LethalSheet
 
         private int[] quotaMod = new int[2];
         private int currentQuotaMod = 0;
+
+        private int[] keybinds = new int[] { 49, 50, 51 };
+        private bool isRebinding = false;
+        private Label keybindLabel = null;
+        private int selectedKeybindSlot = 0;
 
         Color defaultColor = Color.FromArgb(255, 52, 3);
         String credit = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x96, 0xA0 });
@@ -45,97 +55,101 @@ namespace LethalSheet
         {
             int keycode = e.KeyboardData.VirtualCode;
 
-            if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
+            if (e.KeyboardState != GlobalKeyboardHook.KeyboardState.KeyDown)
+                return;
+
+            // handle day modifications
+            if (isModifyingValue)
             {
-                // handle day modifications
-                if (isModifyingValue)
-                {
-                    HandleModification(keycode);
-                    return;
-                }
-
-                Label? outputLabel = this.Controls.Find("debuglabel", true).FirstOrDefault() as Label;
-                PictureBox? outputPicture = this.Controls.Find("debugimage", true).FirstOrDefault() as PictureBox;
-
-                Bitmap bmp = null;
-                String result = string.Empty;
-
-                switch (keycode)
-                {
-                    case 49:    // [1] -> collected scrap
-                        {
-                            result = Screenshot.GetCollectedScrap(out bmp);
-
-                            if (result == String.Empty)
-                                break;
-
-                            try
-                            {
-                                LethalSheet.AddScrapCollected(int.Parse(result));
-                            }
-                            catch
-                            {
-                                Debug.WriteLine($"int parse error: {result}");
-                            }
-
-                            break;
-                        }
-                    case 50:    // [2] -> sold scrap
-                        {
-                            result = Screenshot.GetSoldAmount(out bmp);
-
-                            if (result == String.Empty)
-                                break;
-
-                            try
-                            {
-                                LethalSheet.AddScrapSold(int.Parse(result));
-                            }
-                            catch
-                            {
-                                Debug.WriteLine($"int parse error: {result}");
-                            }
-
-                            break;
-                        }
-                    case 51:    // [3] -> new quota
-                        {
-                            result = Screenshot.GetNewQuota(out bmp);
-
-                            if (result == String.Empty)
-                                break;
-
-                            try
-                            {
-                                selectedQuota = LethalSheet.currentQuota + 1;
-                                LethalSheet.SetNewQuota(int.Parse(result));
-                            }
-                            catch
-                            {
-                                Debug.WriteLine($"int parse error: {result}");
-                            }
-
-                            break;
-                        }
-                    default:
-                        {
-                            return;
-                        }
-                }
-
-                outputLabel.Text = $"Result Debug: {result}";
-                outputPicture.Image = bmp;
-
-                RefreshForm();
-
-                e.Handled = true;
+                HandleModification(keycode);
+                return;
             }
+
+            // handle keybinds
+            if (isRebinding)
+            {
+                HandleRebind(keycode);
+                return;
+            }
+
+            Label? outputLabel = this.Controls.Find("debuglabel", true).FirstOrDefault() as Label;
+            PictureBox? outputPicture = this.Controls.Find("debugimage", true).FirstOrDefault() as PictureBox;
+
+            Bitmap bmp = null;
+            String result = string.Empty;
+
+            if (keycode == keybinds[0])   // [1] -> collected scrap
+            {
+                result = Screenshot.GetCollectedScrap(out bmp);
+
+                if (result == String.Empty)
+                    goto done;
+
+                try { LethalSheet.AddScrapCollected(int.Parse(result)); }
+                catch { Debug.WriteLine($"int parse error: {result}"); }
+            }
+            else if (keycode == keybinds[1])    // [2] -> sold scrap
+            {
+                result = Screenshot.GetSoldAmount(out bmp);
+
+                if (result == String.Empty)
+                    goto done;
+
+                try { LethalSheet.AddScrapSold(int.Parse(result)); }
+                catch { Debug.WriteLine($"int parse error: {result}"); }
+            }
+            else if (keycode == keybinds[2])    // [3] -> new quota
+            {
+                result = Screenshot.GetNewQuota(out bmp);
+
+                if (result == String.Empty)
+                    goto done;
+
+                try
+                {
+                    selectedQuota = LethalSheet.currentQuota + 1;
+                    LethalSheet.SetNewQuota(int.Parse(result));
+                }
+                catch { Debug.WriteLine($"int parse error: {result}"); }
+            }
+            else
+            {
+                return;
+            }
+
+            done:
+
+            outputLabel.Text = $"Result Debug: {result}";
+            outputPicture.Image = bmp;
+
+            RefreshForm();
+
+            e.Handled = true;
         }
 
-        // some constants to make this less confusing
-        const int ESC = 27;
-        const int ENTER = 13;
-        const int BACKSPACE = 8;
+        private void HandleRebind(int keycode)
+        {
+            // cancel
+            if (keycode == ESC)
+            {
+                // stop modifying the key
+                isRebinding = false;
+                keybindLabel.ForeColor = defaultColor;
+
+                RefreshForm();
+                return;
+            }
+
+            keybinds[selectedKeybindSlot] = keycode;
+
+            // stop modifying the key
+            isRebinding = false;
+            keybindLabel.ForeColor = defaultColor;
+
+            RefreshForm();
+            return;
+        }
+
         private void HandleModification(int keycode)
         {
             // cancel
@@ -219,32 +233,24 @@ namespace LethalSheet
 
         public void RefreshForm()
         {
-            Label? shipLabel = this.Controls.Find("ship", true).FirstOrDefault() as Label;
-            Label? averageLabel = this.Controls.Find("average", true).FirstOrDefault() as Label;
-            Label? soldLabel = this.Controls.Find("sold", true).FirstOrDefault() as Label;
-            Label? totalLabel = this.Controls.Find("total", true).FirstOrDefault() as Label;
-            Label? quotaLabel = this.Controls.Find("quota", true).FirstOrDefault() as Label;
-            Label? creditsLabel = this.Controls.Find("credits", true).FirstOrDefault() as Label;
-            Label? avgReqLabel = this.Controls.Find("avgReq", true).FirstOrDefault() as Label;
-
-            Label? day1label = this.Controls.Find("day1", true).FirstOrDefault() as Label;
-            Label? day2label = this.Controls.Find("day2", true).FirstOrDefault() as Label;
-            Label? day3label = this.Controls.Find("day3", true).FirstOrDefault() as Label;
-
-            shipLabel.Text = $"SHIP: {credit}{LethalSheet.overallShip}";
-            averageLabel.Text = $"AVG: {credit}{LethalSheet.overallAverage}";
-            soldLabel.Text = $"SOLD: {credit}{LethalSheet.overallSold}";
-            totalLabel.Text = $"TOTAL: {credit}{LethalSheet.overallTotal}";
+            this.ship.Text = $"SHIP: {credit}{LethalSheet.overallShip}";
+            this.average.Text = $"AVG: {credit}{LethalSheet.overallAverage}";
+            this.sold.Text = $"SOLD: {credit}{LethalSheet.overallSold}";
+            this.total.Text = $"TOTAL: {credit}{LethalSheet.overallTotal}";
 
             Quota quota = LethalSheet.GetQuota(selectedQuota);
-            quotaLabel.Text = $"Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
-            creditsLabel.Text = $"{credit}{LethalSheet.currentCredits}";
+            this.quota.Text = $"Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
+            this.credits.Text = $"{credit}{LethalSheet.currentCredits}";
 
-            avgReqLabel.Text = $"Average required: {credit}{LethalSheet.CalculateAverageRequiredToCompleteRun()}";
+            this.avgReq.Text = $"Average required: {credit}{LethalSheet.CalculateAverageRequiredToCompleteRun()}";
 
-            day1label.Text = $"Day 1: {credit}{quota.days[0]}";
-            day2label.Text = $"Day 2: {credit}{quota.days[1]}";
-            day3label.Text = $"Day 3: {credit}{quota.days[2]}";
+            this.day1.Text = $"Day 1: {credit}{quota.days[0]}";
+            this.day2.Text = $"Day 2: {credit}{quota.days[1]}";
+            this.day3.Text = $"Day 3: {credit}{quota.days[2]}";
+
+            this.key1.Text = $"- Scrap collected: [{(char)keybinds[0]}]";
+            this.key2.Text = $"- Scrap sold: [{(char)keybinds[1]}]";
+            this.key3.Text = $"- New quota: [{(char)keybinds[2]}]";
         }
 
         private void quotaNext_Click(object sender, EventArgs e)
@@ -282,6 +288,9 @@ namespace LethalSheet
 
         private void day_Click(object sender, EventArgs e)
         {
+            if (isRebinding || isModifyingValue)
+                return;
+
             currentModification = "";
             modifyLabel = sender as Label;
             modifyLabel.ForeColor = Color.White;
@@ -295,6 +304,9 @@ namespace LethalSheet
 
         private void quota_Click(object sender, EventArgs e)
         {
+            if (isRebinding || isModifyingValue)
+                return;
+
             currentQuotaMod = 0;
             quotaMod[0] = 0;
             quotaMod[1] = LethalSheet.GetQuota(selectedQuota).quotaReq;
@@ -314,6 +326,17 @@ namespace LethalSheet
         {
             LethalSheet.Reset();
             RefreshForm();
+        }
+
+        private void rebind_Key(object sender, EventArgs e)
+        {
+            if (isRebinding || isModifyingValue)
+                return;
+
+            isRebinding = true;
+            keybindLabel = sender as Label;
+            selectedKeybindSlot = int.Parse(keybindLabel.Name.Last().ToString()) - 1;
+            keybindLabel.ForeColor = Color.White;
         }
     }
 }

@@ -33,9 +33,9 @@
             label2 = new Label();
             pictureBox1 = new PictureBox();
             label1 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
+            key1 = new Label();
+            key2 = new Label();
+            key3 = new Label();
             ship = new Label();
             average = new Label();
             total = new Label();
@@ -88,7 +88,7 @@
             label2.Name = "label2";
             label2.Size = new Size(488, 55);
             label2.TabIndex = 3;
-            label2.Text = "Lethal Sheet v10";
+            label2.Text = "Lethal Sheet v11";
             // 
             // pictureBox1
             // 
@@ -113,44 +113,47 @@
             label1.Text = "Keybinds:";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // key1
             // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.ForeColor = Color.FromArgb(255, 52, 3);
-            label3.Location = new Point(658, 199);
-            label3.Margin = new Padding(0, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(274, 22);
-            label3.TabIndex = 6;
-            label3.Text = "- Scrap collected: [1]";
+            key1.AutoSize = true;
+            key1.BackColor = Color.Transparent;
+            key1.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            key1.ForeColor = Color.FromArgb(255, 52, 3);
+            key1.Location = new Point(658, 199);
+            key1.Margin = new Padding(0, 0, 3, 0);
+            key1.Name = "key1";
+            key1.Size = new Size(274, 22);
+            key1.TabIndex = 6;
+            key1.Text = "- Scrap collected: [1]";
+            key1.Click += rebind_Key;
             // 
-            // label4
+            // key2
             // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Transparent;
-            label4.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.ForeColor = Color.FromArgb(255, 52, 3);
-            label4.Location = new Point(658, 242);
-            label4.Margin = new Padding(0, 0, 3, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(214, 22);
-            label4.TabIndex = 7;
-            label4.Text = "- Scrap sold: [2]";
+            key2.AutoSize = true;
+            key2.BackColor = Color.Transparent;
+            key2.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            key2.ForeColor = Color.FromArgb(255, 52, 3);
+            key2.Location = new Point(658, 242);
+            key2.Margin = new Padding(0, 0, 3, 0);
+            key2.Name = "key2";
+            key2.Size = new Size(214, 22);
+            key2.TabIndex = 7;
+            key2.Text = "- Scrap sold: [2]";
+            key2.Click += rebind_Key;
             // 
-            // label5
+            // key3
             // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Transparent;
-            label5.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label5.ForeColor = Color.FromArgb(255, 52, 3);
-            label5.Location = new Point(658, 288);
-            label5.Margin = new Padding(0, 0, 3, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(202, 22);
-            label5.TabIndex = 8;
-            label5.Text = "- New quota: [3]";
+            key3.AutoSize = true;
+            key3.BackColor = Color.Transparent;
+            key3.Font = new Font("IBM 3270", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            key3.ForeColor = Color.FromArgb(255, 52, 3);
+            key3.Location = new Point(658, 288);
+            key3.Margin = new Padding(0, 0, 3, 0);
+            key3.Name = "key3";
+            key3.Size = new Size(202, 22);
+            key3.TabIndex = 8;
+            key3.Text = "- New quota: [3]";
+            key3.Click += rebind_Key;
             // 
             // ship
             // 
@@ -355,9 +358,9 @@
             Controls.Add(total);
             Controls.Add(average);
             Controls.Add(ship);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(label3);
+            Controls.Add(key3);
+            Controls.Add(key2);
+            Controls.Add(key1);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
             Controls.Add(label2);
@@ -389,9 +392,9 @@
         private Label label2;
         private PictureBox pictureBox1;
         private Label label1;
-        private Label label3;
-        private Label label4;
-        private Label label5;
+        private Label key1;
+        private Label key2;
+        private Label key3;
         private Label ship;
         private Label average;
         private Label total;
