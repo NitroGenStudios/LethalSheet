@@ -119,7 +119,7 @@ namespace LethalSheet
             }
 
         done:
-
+            Debug.WriteLine($"Current day: {LethalSheet.currentDay}\nCurrent Quota: {LethalSheet.currentQuota}");
             outputLabel.Text = $"Result Debug: {result}";
             outputPicture.Image = bmp;
 
@@ -169,7 +169,11 @@ namespace LethalSheet
             {
                 // enter modification
                 if (modType == modificationType.day)
+                {
                     LethalSheet.GetQuota(selectedQuota).SetDay(dayToModify, int.Parse(currentModification));
+                    LethalSheet.currentDay = dayToModify + 1; 
+                    LethalSheet.currentQuota = selectedQuota;
+                }
                 if (modType == modificationType.quota)
                 {
                     if (currentQuotaMod == 0)
@@ -185,6 +189,12 @@ namespace LethalSheet
 
                     LethalSheet.GetQuota(selectedQuota).sold = quotaMod[0];
                     LethalSheet.GetQuota(selectedQuota).quotaReq = quotaMod[1];
+
+                    LethalSheet.currentQuota = selectedQuota + 1;
+                    LethalSheet.currentDay = 0;
+                    selectedQuota += 1;
+
+                    Debug.WriteLine($"Current day: {LethalSheet.currentDay}\nCurrent Quota: {LethalSheet.currentQuota}");
                 }
 
                 // stop modifying the day
@@ -207,9 +217,9 @@ namespace LethalSheet
                 if (modType == modificationType.day)
                     modifyLabel.Text = String.Format(modificationBase, dayToModify + 1, currentModification);
                 if (modType == modificationType.quota && currentQuotaMod == 0)
-                    modifyLabel.Text = String.Format(modificationBase, selectedQuota, currentModification, quotaMod[1]);
+                    modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, currentModification, quotaMod[1]);
                 if (modType == modificationType.quota && currentQuotaMod == 1)
-                    modifyLabel.Text = String.Format(modificationBase, selectedQuota, quotaMod[0], currentModification);
+                    modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, quotaMod[0], currentModification);
 
                 return;
             }
@@ -227,9 +237,9 @@ namespace LethalSheet
             if (modType == modificationType.day)
                 modifyLabel.Text = String.Format(modificationBase, dayToModify + 1, currentModification);
             if (modType == modificationType.quota && currentQuotaMod == 0)
-                modifyLabel.Text = String.Format(modificationBase, selectedQuota, currentModification, quotaMod[1]);
+                modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, currentModification, quotaMod[1]);
             if (modType == modificationType.quota && currentQuotaMod == 1)
-                modifyLabel.Text = String.Format(modificationBase, selectedQuota, quotaMod[0], currentModification);
+                modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, quotaMod[0], currentModification);
         }
 
         public void RefreshForm()
