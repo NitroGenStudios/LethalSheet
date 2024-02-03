@@ -171,7 +171,7 @@ namespace LethalSheet
                 if (modType == modificationType.day)
                 {
                     LethalSheet.GetQuota(selectedQuota).SetDay(dayToModify, int.Parse(currentModification));
-                    LethalSheet.currentDay = dayToModify + 1; 
+                    LethalSheet.currentDay = dayToModify + 1;
                     LethalSheet.currentQuota = selectedQuota;
                 }
                 if (modType == modificationType.quota)
@@ -190,9 +190,12 @@ namespace LethalSheet
                     LethalSheet.GetQuota(selectedQuota).sold = quotaMod[0];
                     LethalSheet.GetQuota(selectedQuota).quotaReq = quotaMod[1];
 
-                    LethalSheet.currentQuota = selectedQuota + 1;
-                    LethalSheet.currentDay = 0;
-                    selectedQuota += 1;
+                    if (LethalSheet.currentDay == 3)
+                    {
+                        LethalSheet.currentQuota = selectedQuota + 1;
+                        LethalSheet.currentDay = 0;
+                        selectedQuota += 1;
+                    }
 
                     Debug.WriteLine($"Current day: {LethalSheet.currentDay}\nCurrent Quota: {LethalSheet.currentQuota}");
                 }
@@ -216,9 +219,9 @@ namespace LethalSheet
 
                 if (modType == modificationType.day)
                     modifyLabel.Text = String.Format(modificationBase, dayToModify + 1, currentModification);
-                if (modType == modificationType.quota && currentQuotaMod == 0)
+                else if (modType == modificationType.quota && currentQuotaMod == 0)
                     modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, currentModification, quotaMod[1]);
-                if (modType == modificationType.quota && currentQuotaMod == 1)
+                else if (modType == modificationType.quota && currentQuotaMod == 1)
                     modifyLabel.Text = String.Format(modificationBase, selectedQuota + 1, quotaMod[0], currentModification);
 
                 return;
@@ -249,15 +252,20 @@ namespace LethalSheet
             this.sold.Text = $"SOLD: {credit}{LethalSheet.overallSold}";
             this.total.Text = $"TOTAL: {credit}{LethalSheet.overallTotal}";
 
+            String day4 = (LethalSheet.currentDay == 3 && LethalSheet.currentQuota == selectedQuota) ? "> " : "";
             Quota quota = LethalSheet.GetQuota(selectedQuota);
-            this.quota.Text = $"Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
+            this.quota.Text = $"{day4}Quota {selectedQuota + 1}: {quota.sold}/{quota.quotaReq} +{LethalSheet.CalculateOvertimeBonus()}";
             this.credits.Text = $"{credit}{LethalSheet.currentCredits}";
 
             this.avgReq.Text = $"Average required: {credit}{LethalSheet.CalculateAverageRequiredToCompleteRun()}";
 
-            this.day1.Text = $"Day 1: {credit}{quota.days[0]}";
-            this.day2.Text = $"Day 2: {credit}{quota.days[1]}";
-            this.day3.Text = $"Day 3: {credit}{quota.days[2]}";
+            String day1 = (LethalSheet.currentDay == 0 && LethalSheet.currentQuota == selectedQuota) ? "> " : "";
+            String day2 = (LethalSheet.currentDay == 1 && LethalSheet.currentQuota == selectedQuota) ? "> " : "";
+            String day3 = (LethalSheet.currentDay == 2 && LethalSheet.currentQuota == selectedQuota) ? "> " : "";
+
+            this.day1.Text = $"{day1}Day 1: {credit}{quota.days[0]}";
+            this.day2.Text = $"{day2}Day 2: {credit}{quota.days[1]}";
+            this.day3.Text = $"{day3}Day 3: {credit}{quota.days[2]}";
 
             this.key1.Text = $"- Scrap collected: [{(char)keybinds[0]}]";
             this.key2.Text = $"- Scrap sold: [{(char)keybinds[1]}]";
@@ -337,6 +345,7 @@ namespace LethalSheet
 
         private void reset_Click(object sender, EventArgs e)
         {
+            selectedQuota = 0;
             LethalSheet.Reset();
             RefreshForm();
         }

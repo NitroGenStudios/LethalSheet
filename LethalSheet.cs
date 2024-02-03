@@ -167,6 +167,11 @@ namespace LethalSheet
             return Math.Max(result, 0);
         }
 
+        public static int CalculateAmountToSellToReachValue(int amountToReach)
+        {
+            return Math.Max((int)Math.Ceiling((5 * amountToReach + GetCurrentQuota().quotaReq + 75) / 6.0f) - overallShip, 0);
+        }
+
         public static String ToString()
         {
             String result = "";
